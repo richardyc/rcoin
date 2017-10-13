@@ -1,0 +1,27 @@
+IDI_ICON1 ICON DISCARDABLE "icons/rcoin.ico"
+
+#include <windows.h> // needed for VERSIONINFO
+
+VS_VERSION_INFO VERSIONINFO
+FILEOS         	VOS_NT_WINDOWS32
+FILETYPE       	VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4" // U.S. English - multilingual (hex)
+        BEGIN
+            VALUE "CompanyName",        "rcoin"
+            VALUE "FileDescription",    "rcoin-Qt (OSS GUI client for rcoin)"
+            VALUE "InternalName",       "rcoin-qt"
+            VALUE "LegalCopyright",     "2014-2016 The rcoin developers"
+            VALUE "LegalTrademarks1",   "Distributed under the MIT software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
+            VALUE "OriginalFilename",   "rcoin-qt.exe"
+            VALUE "ProductName",        "rcoin-Qt"
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1252 // language neutral - multilingual (decimal)
+    END
+END

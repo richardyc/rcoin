@@ -1,0 +1,3 @@
+rcoin-qt usr/bin
+debian/rcoin-qt.desktop usr/share/applications
+debian/rcoin-qt.protocol usr/share/kde4/services
