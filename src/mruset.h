@@ -1,5 +1,5 @@
 // Copyright (c) 2012 The Bitcoin developers
-// Distributed under the MIT software license, see the accompanying
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef BITCOIN_MRUSET_H
 #define BITCOIN_MRUSET_H
@@ -51,7 +51,7 @@ public:
     size_type max_size(size_type s)
     {
         if (s)
-            while (queue.size() >= s)
+            while (queue.size() > s)
             {
                 set.erase(queue.front());
                 queue.pop_front();

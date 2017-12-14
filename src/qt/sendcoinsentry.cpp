@@ -1,5 +1,10 @@
+// Copyright (c) 2011-2013 The Bitcoin developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #include "sendcoinsentry.h"
 #include "ui_sendcoinsentry.h"
+
 #include "guiutil.h"
 #include "bitcoinunits.h"
 #include "addressbookpage.h"
@@ -20,7 +25,11 @@ SendCoinsEntry::SendCoinsEntry(QWidget *parent) :
 #ifdef Q_OS_MAC
     ui->payToLayout->setSpacing(4);
 #endif
-
+#if QT_VERSION >= 0x040700
+    /* Do not move this to the XML file, Qt before 4.7 will choke on it */
+    ui->addAsLabel->setPlaceholderText(tr("Enter a label for this address to add it to your address book"));
+    ui->payTo->setPlaceholderText(tr("Enter a Rcoin address (e.g. Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2)"));
+#endif
     setFocusPolicy(Qt::TabFocus);
     setFocusProxy(ui->payTo);
 
@@ -65,8 +74,8 @@ void SendCoinsEntry::setModel(WalletModel *model)
 {
     this->model = model;
 
-    // if(model && model->getOptionsModel())
-    //     connect(model->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
+    if(model && model->getOptionsModel())
+        connect(model->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
 
     connect(ui->payAmount, SIGNAL(textChanged()), this, SIGNAL(payAmountChanged()));
 
@@ -84,10 +93,8 @@ void SendCoinsEntry::clear()
     ui->addAsLabel->clear();
     ui->payAmount->clear();
     ui->payTo->setFocus();
-    if(model && model->getOptionsModel())
-    {
-        ui->payAmount->setDisplayUnit(model->getOptionsModel()->getDisplayUnit());
-    }
+    // update the display unit, to not use the default ("BTC")
+    updateDisplayUnit();
 }
 
 void SendCoinsEntry::on_deleteButton_clicked()
@@ -152,6 +159,12 @@ void SendCoinsEntry::setValue(const SendCoinsRecipient &value)
     ui->payAmount->setValue(value.amount);
 }
 
+void SendCoinsEntry::setAddress(const QString &address)
+{
+    ui->payTo->setText(address);
+    ui->payAmount->setFocus();
+}
+
 bool SendCoinsEntry::isClear()
 {
     return ui->payTo->text().isEmpty();
@@ -160,4 +173,13 @@ bool SendCoinsEntry::isClear()
 void SendCoinsEntry::setFocus()
 {
     ui->payTo->setFocus();
+}
+
+void SendCoinsEntry::updateDisplayUnit()
+{
+    if(model && model->getOptionsModel())
+    {
+        // Update payAmount with the current unit
+        ui->payAmount->setDisplayUnit(model->getOptionsModel()->getDisplayUnit());
+    }
 }

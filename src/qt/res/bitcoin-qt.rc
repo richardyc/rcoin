@@ -1,22 +1,34 @@
-IDI_ICON1 ICON DISCARDABLE "icons/rcoin.ico"
+IDI_ICON1 ICON DISCARDABLE "icons/bitcoin.ico"
+IDI_ICON2 ICON DISCARDABLE "icons/bitcoin_testnet.ico"
 
-#include <windows.h> // needed for VERSIONINFO
+#include <windows.h>             // needed for VERSIONINFO
+#include "../../clientversion.h" // holds the needed client version information
+
+#define VER_PRODUCTVERSION     CLIENT_VERSION_MAJOR,CLIENT_VERSION_MINOR,CLIENT_VERSION_REVISION,CLIENT_VERSION_BUILD
+#define VER_PRODUCTVERSION_STR STRINGIZE(CLIENT_VERSION_MAJOR) "." STRINGIZE(CLIENT_VERSION_MINOR) "." STRINGIZE(CLIENT_VERSION_REVISION) "." STRINGIZE(CLIENT_VERSION_BUILD)
+#define VER_FILEVERSION        VER_PRODUCTVERSION
+#define VER_FILEVERSION_STR    VER_PRODUCTVERSION_STR
+#define COPYRIGHT_STR          "2009-" STRINGIZE(COPYRIGHT_YEAR) " The Bitcoin developers 2011-" STRINGIZE(COPYRIGHT_YEAR) " The Rcoin developers"
 
 VS_VERSION_INFO VERSIONINFO
-FILEOS         	VOS_NT_WINDOWS32
-FILETYPE       	VFT_APP
+FILEVERSION     VER_FILEVERSION
+PRODUCTVERSION  VER_PRODUCTVERSION
+FILEOS          VOS_NT_WINDOWS32
+FILETYPE        VFT_APP
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "rcoin"
-            VALUE "FileDescription",    "rcoin-Qt (OSS GUI client for rcoin)"
+            VALUE "CompanyName",        "Rcoin"
+            VALUE "FileDescription",    "Rcoin-Qt (OSS GUI client for Rcoin)"
+            VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "rcoin-qt"
-            VALUE "LegalCopyright",     "2014-2016 The rcoin developers"
-            VALUE "LegalTrademarks1",   "Distributed under the MIT software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
+            VALUE "LegalCopyright",     COPYRIGHT_STR
+            VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "rcoin-qt.exe"
-            VALUE "ProductName",        "rcoin-Qt"
+            VALUE "ProductName",        "Rcoin-Qt"
+            VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END
 

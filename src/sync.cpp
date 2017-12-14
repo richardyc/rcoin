@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2012 The Bitcoin developers
-// Distributed under the MIT software license, see the accompanying
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "sync.h"
@@ -24,7 +24,7 @@ void PrintLockContention(const char* pszName, const char* pszFile, int nLine)
 //     --> may result in deadlock between the two threads, depending on when they run.
 // Solution implemented here:
 // Keep track of pairs of locks: (A before B), (A before C), etc.
-// Complain if any thread trys to lock in a different order.
+// Complain if any thread tries to lock in a different order.
 //
 
 struct CLockLocation

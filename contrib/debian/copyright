@@ -6,7 +6,7 @@ Source: http://sourceforge.net/projects/bitcoin/files/
  https://github.com/bitcoin/bitcoin
 
 Files: *
-Copyright: 2009-2011, Bitcoin Developers
+Copyright: 2009-2012, Bitcoin Developers
 License: Expat
 Comment: The Bitcoin Developers encompasses the current developers listed on bitcoin.org,
          as well as the numerous contributors to the project.
@@ -55,9 +55,8 @@ Comment: Icon Pack: Human-O2
 
 Files: src/qt/res/icons/transaction*.png
 Copyright: md2k7
-License: You are free to do with these icons as you wish, including selling,
- copying, modifying etc.
-Comment: Site: https://forum.bitcoin.org/index.php?topic=15276.0
+License: Expat
+Comment: Site: https://bitcointalk.org/index.php?topic=15276.0
 
 Files: src/qt/res/icons/configure.png, src/qt/res/icons/quit.png,
       src/qt/res/icons/editcopy.png, src/qt/res/icons/editpaste.png,
@@ -66,6 +65,11 @@ Files: src/qt/res/icons/configure.png, src/qt/res/icons/quit.png,
 Copyright: http://www.everaldo.com
 License: LGPL
 Comment: Icon Pack: Crystal SVG
+
+Files: src/qt/res/icons/bitcoin.png, src/qt/res/icons/toolbar.png
+Copyright: Bitboy (optimized for 16x16 by Wladimir van der Laan)
+License: PUB-DOM
+Comment: Site: https://bitcointalk.org/?topic=1756.0
 
 Files:  scripts/img/reload.xcf, src/qt/res/movies/update_spinner.mng
 Copyright: Everaldo (Everaldo Coelho)
@@ -128,7 +132,7 @@ Comment:
  located in '/usr/share/common-licenses/GPL-2'.
  .
  You should have received a copy of the GNU General Public License along
- with this program.  If not, see <https://www.gnu.org/licenses/>.
+ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 License: GPL-3+
  Permission is granted to copy, distribute and/or modify this document
@@ -139,7 +143,7 @@ Comment:
  located in '/usr/share/common-licenses/GPL-3'.
  .
  You should have received a copy of the GNU General Public License along
- with this program.  If not, see <https://www.gnu.org/licenses/>.
+ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 License: LGPL
  This program is free software: you can redistribute it and/or modify
@@ -156,7 +160,7 @@ Comment:
  located in '/usr/share/common-licenses/LGPL'.
  .
  You should have received a copy of the GNU General Public License
- along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 License: PUB-DOM
  This work is in the public domain.

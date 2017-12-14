@@ -1,7 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
-// Copyright (c) 2015 The rcoin developers
-// Distributed under the MIT software license, see the accompanying
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef BITCOIN_HASH_H
 #define BITCOIN_HASH_H
@@ -11,6 +10,7 @@
 
 #include <openssl/sha.h>
 #include <openssl/ripemd.h>
+#include <vector>
 
 template<typename T1>
 inline uint256 Hash(const T1 pbegin, const T1 pend)
@@ -62,6 +62,7 @@ public:
     }
 };
 
+
 template<typename T1, typename T2>
 inline uint256 Hash(const T1 p1begin, const T1 p1end,
                     const T2 p2begin, const T2 p2end)
@@ -104,13 +105,22 @@ uint256 SerializeHash(const T& obj, int nType=SER_GETHASH, int nVersion=PROTOCOL
     return ss.GetHash();
 }
 
-inline uint160 Hash160(const std::vector<unsigned char>& vch)
+template<typename T1>
+inline uint160 Hash160(const T1 pbegin, const T1 pend)
 {
+    static unsigned char pblank[1];
     uint256 hash1;
-    SHA256(&vch[0], vch.size(), (unsigned char*)&hash1);
+    SHA256((pbegin == pend ? pblank : (unsigned char*)&pbegin[0]), (pend - pbegin) * sizeof(pbegin[0]), (unsigned char*)&hash1);
     uint160 hash2;
     RIPEMD160((unsigned char*)&hash1, sizeof(hash1), (unsigned char*)&hash2);
     return hash2;
 }
 
-#endif // BITCOIN_HASH_H
+inline uint160 Hash160(const std::vector<unsigned char>& vch)
+{
+    return Hash160(vch.begin(), vch.end());
+}
+
+unsigned int MurmurHash3(unsigned int nHashSeed, const std::vector<unsigned char>& vDataToHash);
+
+#endif

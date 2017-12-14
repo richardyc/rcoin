@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
-// Distributed under the MIT software license, see the accompanying
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef _BITCOIN_COMPAT_H
 #define _BITCOIN_COMPAT_H 1
@@ -10,10 +10,6 @@
 #define WIN32_LEAN_AND_MEAN 1
 #ifndef NOMINMAX
 #define NOMINMAX
-#endif
-// Unset FD size if already set before trying to set it again.
-#ifdef FD_SETSIZE
-#undef FD_SETSIZE
 #endif
 #define FD_SETSIZE 1024 // max number of fds in fd_set
 #include <winsock2.h>
@@ -30,9 +26,7 @@
 #include <ifaddrs.h>
 #endif
 
-#ifndef _WIN64
 typedef u_int SOCKET;
-#endif
 #ifdef WIN32
 #define MSG_NOSIGNAL        0
 #define MSG_DONTWAIT        0

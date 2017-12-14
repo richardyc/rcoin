@@ -1,16 +1,16 @@
-Name rcoin
+Name Rcoin
 
 RequestExecutionLevel highest
 SetCompressor /SOLID lzma
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.3.3.1
-!define COMPANY "rcoin project"
-!define URL https://github.com/rcoinFoundation/rcoin/
+!define VERSION 0.8.7.4
+!define COMPANY "Rcoin project"
+!define URL http://www.rcoin.org/
 
 # MUI Symbol Definitions
-!define MUI_ICON "../share/pixmaps/rcoin.ico"
+!define MUI_ICON "../share/pixmaps/bitcoin.ico"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "../share/pixmaps/nsis-wizard.bmp"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_RIGHT
@@ -19,8 +19,8 @@ SetCompressor /SOLID lzma
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
-!define MUI_STARTMENUPAGE_DEFAULTFOLDER rcoin
-!define MUI_FINISHPAGE_RUN $INSTDIR\rcoin.exe
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER Rcoin
+!define MUI_FINISHPAGE_RUN $INSTDIR\rcoin-qt.exe
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "../share/pixmaps/nsis-wizard.bmp"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
@@ -28,9 +28,6 @@ SetCompressor /SOLID lzma
 # Included files
 !include Sections.nsh
 !include MUI2.nsh
-!if "" == "64"
-!include x64.nsh
-!endif
 
 # Variables
 Var StartMenuGroup
@@ -48,18 +45,14 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile rcoin-${VERSION}-win-setup.exe
-!if "" == "64"
-InstallDir $PROGRAMFILES64\rcoin
-!else
-InstallDir $PROGRAMFILES\rcoin
-!endif
+OutFile rcoin-${VERSION}-win32-setup.exe
+InstallDir $PROGRAMFILES\Rcoin
 CRCCheck on
 XPStyle on
 BrandingText " "
 ShowInstDetails show
-VIProductVersion ${VERSION}.0
-VIAddVersionKey ProductName rcoin
+VIProductVersion ${VERSION}
+VIAddVersionKey ProductName Rcoin
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
@@ -73,21 +66,19 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File ../release/rcoin.exe
+    File ../release/rcoin-qt.exe
     File /oname=COPYING.txt ../COPYING
     File /oname=readme.txt ../doc/README_windows.txt
     SetOutPath $INSTDIR\daemon
-    File ../release/rcoind.exe
-#    SetOutPath $INSTDIR\doc
-#    File /r ../doc\*.*
-#    SetOutPath $INSTDIR\src
-#    File /r /x *.exe /x *.o ../src\*.*
+    File ../src/rcoind.exe
+    SetOutPath $INSTDIR\src
+    File /r /x *.exe /x *.o ../src\*.*
     SetOutPath $INSTDIR
     WriteRegStr HKCU "${REGKEY}\Components" Main 1
 
     # Remove old wxwidgets-based-bitcoin executable and locales:
-    #Delete /REBOOTOK $INSTDIR\bitcoin.exe
-    #RMDir /r /REBOOTOK $INSTDIR\locale
+    Delete /REBOOTOK $INSTDIR\rcoin.exe
+    RMDir /r /REBOOTOK $INSTDIR\locale
 SectionEnd
 
 Section -post SEC0001
@@ -96,8 +87,8 @@ Section -post SEC0001
     WriteUninstaller $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory $SMPROGRAMS\$StartMenuGroup
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\$(^Name).lnk" $INSTDIR\rcoin.exe
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall $(^Name).lnk" $INSTDIR\uninstall.exe
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Rcoin.lnk" $INSTDIR\rcoin-qt.exe
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall Rcoin.lnk" $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_END
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayName "$(^Name)"
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayVersion "${VERSION}"
@@ -108,9 +99,9 @@ Section -post SEC0001
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoModify 1
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoRepair 1
     WriteRegStr HKCR "rcoin" "URL Protocol" ""
-    WriteRegStr HKCR "rcoin" "" "URL:rcoin"
-    WriteRegStr HKCR "rcoin\DefaultIcon" "" $INSTDIR\rcoin.exe
-    WriteRegStr HKCR "rcoin\shell\open\command" "" '"$INSTDIR\rcoin.exe" "%1"'
+    WriteRegStr HKCR "rcoin" "" "URL:Rcoin"
+    WriteRegStr HKCR "rcoin\DefaultIcon" "" $INSTDIR\rcoin-qt.exe
+    WriteRegStr HKCR "rcoin\shell\open\command" "" '"$INSTDIR\rcoin-qt.exe" "%1"'
 SectionEnd
 
 # Macro for selecting uninstaller sections
@@ -128,20 +119,19 @@ done${UNSECTION_ID}:
 
 # Uninstaller sections
 Section /o -un.Main UNSEC0000
-    Delete /REBOOTOK $INSTDIR\rcoin.exe
+    Delete /REBOOTOK $INSTDIR\rcoin-qt.exe
     Delete /REBOOTOK $INSTDIR\COPYING.txt
     Delete /REBOOTOK $INSTDIR\readme.txt
     RMDir /r /REBOOTOK $INSTDIR\daemon
-#    RMDir /r /REBOOTOK $INSTDIR\src
-#    RMDir /r /REBOOTOK $INSTDIR\src
+    RMDir /r /REBOOTOK $INSTDIR\src
     DeleteRegValue HKCU "${REGKEY}\Components" Main
 SectionEnd
 
 Section -un.post UNSEC0001
     DeleteRegKey HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)"
-    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Uninstall $(^Name).lnk"
-    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\$(^Name).lnk"
-    Delete /REBOOTOK "$SMSTARTUP\rcoin.lnk"
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Uninstall Rcoin.lnk"
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Rcoin.lnk"
+    Delete /REBOOTOK "$SMSTARTUP\Rcoin.lnk"
     Delete /REBOOTOK $INSTDIR\uninstall.exe
     Delete /REBOOTOK $INSTDIR\debug.log
     Delete /REBOOTOK $INSTDIR\db.log
@@ -162,15 +152,6 @@ SectionEnd
 # Installer functions
 Function .onInit
     InitPluginsDir
-!if "" == "64"
-    ${If} ${RunningX64}
-      ; disable registry redirection (enable access to 64-bit portion of registry)
-      SetRegView 64
-    ${Else}
-      MessageBox MB_OK|MB_ICONSTOP "Cannot install 64-bit version on a 32-bit system."
-      Abort
-    ${EndIf}
-!endif
 FunctionEnd
 
 # Uninstaller functions

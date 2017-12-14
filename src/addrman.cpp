@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Pieter Wuille
-// Distributed under the MIT software license, see the accompanying
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "addrman.h"
@@ -43,13 +43,13 @@ bool CAddrInfo::IsTerrible(int64 nNow) const
     if (nTime > nNow + 10*60) // came in a flying DeLorean
         return true;
 
-    if (nTime==0 || nNow-nTime > ADDRMAN_HORIZON_DAYS*24*60*60) // not seen in recent history
+    if (nTime==0 || nNow-nTime > ADDRMAN_HORIZON_DAYS*86400) // not seen in over a month
         return true;
 
-    if (nLastSuccess==0 && nAttempts>=ADDRMAN_RETRIES) // tried N times and never a success
+    if (nLastSuccess==0 && nAttempts>=ADDRMAN_RETRIES) // tried three times and never a success
         return true;
 
-    if (nNow-nLastSuccess > ADDRMAN_MIN_FAIL_DAYS*24*60*60 && nAttempts>=ADDRMAN_MAX_FAILURES) // N successive failures in the last week
+    if (nNow-nLastSuccess > ADDRMAN_MIN_FAIL_DAYS*86400 && nAttempts>=ADDRMAN_MAX_FAILURES) // 10 successive failures in the last week
         return true;
 
     return false;
@@ -103,12 +103,11 @@ CAddrInfo* CAddrMan::Create(const CAddress &addr, const CNetAddr &addrSource, in
     return &mapInfo[nId];
 }
 
-void CAddrMan::SwapRandom(int nRndPos1, int nRndPos2)
+void CAddrMan::SwapRandom(unsigned int nRndPos1, unsigned int nRndPos2)
 {
     if (nRndPos1 == nRndPos2)
         return;
 
-    assert(nRndPos1 >= 0 && nRndPos2 >= 0);
     assert(nRndPos1 < vRandom.size() && nRndPos2 < vRandom.size());
 
     int nId1 = vRandom[nRndPos1];
@@ -150,7 +149,7 @@ int CAddrMan::SelectTried(int nKBucket)
 
 int CAddrMan::ShrinkNew(int nUBucket)
 {
-    assert(nUBucket >= 0 && nUBucket < vvNew.size());
+    assert(nUBucket >= 0 && (unsigned int)nUBucket < vvNew.size());
     std::set<int> &vNew = vvNew[nUBucket];
 
     // first look for deletable items
@@ -412,7 +411,7 @@ CAddress CAddrMan::Select_(int nUnkBias)
             fChanceFactor *= 1.2;
         }
     } else {
-        // use an new node
+        // use a new node
         double fChanceFactor = 1.0;
         while(1)
         {

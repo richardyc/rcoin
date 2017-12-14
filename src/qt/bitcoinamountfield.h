@@ -1,3 +1,7 @@
+// Copyright (c) 2011-2013 The Bitcoin developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #ifndef BITCOINAMOUNTFIELD_H
 #define BITCOINAMOUNTFIELD_H
 
@@ -13,7 +17,9 @@ QT_END_NAMESPACE
 class BitcoinAmountField: public QWidget
 {
     Q_OBJECT
+
     Q_PROPERTY(qint64 value READ value WRITE setValue NOTIFY textChanged USER true)
+
 public:
     explicit BitcoinAmountField(QWidget *parent = 0);
 
@@ -31,7 +37,7 @@ public:
     /** Make field empty and ready for new input. */
     void clear();
 
-    /** Qt messes up the tab chain by default in some cases (issue http://bugreports.qt.nokia.com/browse/QTBUG-10907),
+    /** Qt messes up the tab chain by default in some cases (issue https://bugreports.qt-project.org/browse/QTBUG-10907),
         in these cases we have to set it up manually.
     */
     QWidget *setupTabChain(QWidget *prev);
@@ -55,6 +61,5 @@ private slots:
     void unitChanged(int idx);
 
 };
-
 
 #endif // BITCOINAMOUNTFIELD_H

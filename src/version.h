@@ -1,74 +1,37 @@
 // Copyright (c) 2012 The Bitcoin developers
-// Copyright (c) 2012-2015 The Peercoin developers
-// Copyright (c) 2014-2015 The rcoin developers
-// Distributed under the MIT software license, see the accompanying
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef BITCOIN_VERSION_H
 #define BITCOIN_VERSION_H
 
+#include "clientversion.h"
 #include <string>
 
 //
 // client versioning
 //
 
-// These need to be macro's, as version.cpp's voodoo requires it
-
-// rcoin version - intended for display purpose only
-#define PEERUNITY_VERSION_MAJOR       0
-#define PEERUNITY_VERSION_MINOR       3
-#define PEERUNITY_VERSION_REVISION    3
-#define PEERUNITY_VERSION_BUILD       1
-
-static const int PEERUNITY_VERSION =
-                           1000000 * PEERUNITY_VERSION_MAJOR
-                         +   10000 * PEERUNITY_VERSION_MINOR
-                         +     100 * PEERUNITY_VERSION_REVISION
-                         +       1 * PEERUNITY_VERSION_BUILD;
-
-// Peercoin version - reference for code tracking
-#define PPCOIN_VERSION_MAJOR       0
-#define PPCOIN_VERSION_MINOR       4
-#define PPCOIN_VERSION_REVISION    0
-#define PPCOIN_VERSION_BUILD       0
-
-static const int PPCOIN_VERSION =
-                           1000000 * PPCOIN_VERSION_MAJOR
-                         +   10000 * PPCOIN_VERSION_MINOR
-                         +     100 * PPCOIN_VERSION_REVISION
-                         +       1 * PPCOIN_VERSION_BUILD;
-
-// Bitcoin version - reference for code tracking
-#define BITCOIN_VERSION_MAJOR       0
-#define BITCOIN_VERSION_MINOR       6
-#define BITCOIN_VERSION_REVISION    3
-#define BITCOIN_VERSION_BUILD       0
-
-static const int BITCOIN_VERSION =
-                           1000000 * BITCOIN_VERSION_MAJOR
-                         +   10000 * BITCOIN_VERSION_MINOR
-                         +     100 * BITCOIN_VERSION_REVISION
-                         +       1 * BITCOIN_VERSION_BUILD;
-
-static const int CLIENT_VERSION = BITCOIN_VERSION;
+static const int CLIENT_VERSION =
+                           1000000 * CLIENT_VERSION_MAJOR
+                         +   10000 * CLIENT_VERSION_MINOR
+                         +     100 * CLIENT_VERSION_REVISION
+                         +       1 * CLIENT_VERSION_BUILD;
 
 extern const std::string CLIENT_NAME;
 extern const std::string CLIENT_BUILD;
 extern const std::string CLIENT_DATE;
 
-
 //
 // network protocol versioning
 //
 
-static const int PROTOCOL_VERSION = 70006;
+static const int PROTOCOL_VERSION = 70002;
 
-/* As of rcoin protocol 70002 the MIN_PROTO_VERSION is initialized
- * and determined in init to allow for a pseudo dynamic change of minimum
- * protocol. This is also updated at runtime: net.cpp/ThreadSocketHandler2
- * Old nodes are dropped upon minimum protocol change instead of simply
- * being denied on reconnect. */
-extern int MIN_PROTO_VERSION;
+// intial proto version, to be increased after version/verack negotiation
+static const int INIT_PROTO_VERSION = 209;
+
+// disconnect from peers older than this proto version
+static const int MIN_PEER_PROTO_VERSION = 70002;
 
 // nTime field added to CAddress, starting with this version;
 // if possible, avoid requesting addresses nodes older than this
@@ -80,5 +43,8 @@ static const int NOBLKS_VERSION_END = 32400;
 
 // BIP 0031, pong message, is enabled for all versions AFTER this one
 static const int BIP0031_VERSION = 60000;
+
+// "mempool" command, enhanced "getdata" behavior starts with this version:
+static const int MEMPOOL_GD_VERSION = 60002;
 
 #endif

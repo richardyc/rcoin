@@ -1,22 +1,23 @@
 // Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT software license, see the accompanying
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "signverifymessagedialog.h"
 #include "ui_signverifymessagedialog.h"
 
 #include "addressbookpage.h"
-#include "guiutil.h"
-#include "walletmodel.h"
-
 #include "base58.h"
+#include "guiutil.h"
 #include "init.h"
+#include "main.h"
+#include "optionsmodel.h"
+#include "walletmodel.h"
 #include "wallet.h"
+
+#include <QClipboard>
 
 #include <string>
 #include <vector>
-
-#include <QClipboard>
 
 SignVerifyMessageDialog::SignVerifyMessageDialog(QWidget *parent) :
     QDialog(parent),
@@ -25,11 +26,13 @@ SignVerifyMessageDialog::SignVerifyMessageDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-#if QT_VERSION >= 0x040700
+#if (QT_VERSION >= 0x040700)
+    /* Do not move this to the XML file, Qt before 4.7 will choke on it */
+    ui->addressIn_SM->setPlaceholderText(tr("Enter a Rcoin address (e.g. Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2)"));
     ui->signatureOut_SM->setPlaceholderText(tr("Click \"Sign Message\" to generate signature"));
-    ui->signatureIn_VM->setPlaceholderText(tr("Enter the signature of the message"));
-    ui->addressIn_SM->setPlaceholderText(tr("Enter a rcoin address"));
-    ui->addressIn_VM->setPlaceholderText(tr("Enter a rcoin address"));
+
+    ui->addressIn_VM->setPlaceholderText(tr("Enter a Rcoin address (e.g. Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2)"));
+    ui->signatureIn_VM->setPlaceholderText(tr("Enter Rcoin signature"));
 #endif
 
     GUIUtil::setupAddressWidget(ui->addressIn_SM, this);
@@ -71,6 +74,7 @@ void SignVerifyMessageDialog::setAddress_VM(const QString &address)
 void SignVerifyMessageDialog::showTab_SM(bool fShow)
 {
     ui->tabWidget->setCurrentIndex(0);
+
     if (fShow)
         this->show();
 }
@@ -102,15 +106,13 @@ void SignVerifyMessageDialog::on_pasteButton_SM_clicked()
 
 void SignVerifyMessageDialog::on_signMessageButton_SM_clicked()
 {
-    if (!model)
-        return;
-
     /* Clear old signature to ensure users don't get confused on error with an old signature displayed */
     ui->signatureOut_SM->clear();
 
     CBitcoinAddress addr(ui->addressIn_SM->text().toStdString());
     if (!addr.IsValid())
     {
+        ui->addressIn_SM->setValid(false);
         ui->statusLabel_SM->setStyleSheet("QLabel { color: red; }");
         ui->statusLabel_SM->setText(tr("The entered address is invalid.") + QString(" ") + tr("Please check the address and try again."));
         return;
@@ -191,6 +193,7 @@ void SignVerifyMessageDialog::on_verifyMessageButton_VM_clicked()
     CBitcoinAddress addr(ui->addressIn_VM->text().toStdString());
     if (!addr.IsValid())
     {
+        ui->addressIn_VM->setValid(false);
         ui->statusLabel_VM->setStyleSheet("QLabel { color: red; }");
         ui->statusLabel_VM->setText(tr("The entered address is invalid.") + QString(" ") + tr("Please check the address and try again."));
         return;

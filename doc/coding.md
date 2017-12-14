@@ -1,5 +1,5 @@
 Coding
-======
+====================
 
 Please be consistent with the existing coding style.
 
@@ -7,17 +7,17 @@ Block style:
 
 	bool Function(char* psz, int n)
 	{
-		// Comment summarising what this section of code does
-		for (int i = 0; i < n; i++)
-		{
-			// When something fails, return early
-			if (!Something())
-			return false;
-		...
-		}
-
-	// Success return is usually at the end
-	return true;
+	    // Comment summarising what this section of code does
+	    for (int i = 0; i < n; i++)
+	    {
+	        // When something fails, return early
+	        if (!Something())
+	            return false;
+	        ...
+	    }
+	
+	    // Success return is usually at the end
+	    return true;
 	}
 
 - ANSI/Allman block style
@@ -31,8 +31,7 @@ someVariable.
 
 Common types:
 
-	n       integer number: short, unsigned short, int, unsigned int,
-            int64, uint64, sometimes char if used as a number
+	n       integer number: short, unsigned short, int, unsigned int, int64, uint64, sometimes char if used as a number
 	d       double, float
 	f       flag
 	hash    uint256
@@ -48,7 +47,7 @@ Common types:
 Locking/mutex usage notes
 
 The code is multi-threaded, and uses mutexes and the
-CRITICAL_BLOCK/TRY_CRITICAL_BLOCK macros to protect data structures.
+LOCK/TRY_LOCK macros to protect data structures.
 
 Deadlocks due to inconsistent lock ordering (thread 1 locks cs_main
 and then cs_wallet, while thread 2 locks them in the opposite order:
@@ -64,32 +63,32 @@ and its cs_KeyStore lock for example).
 -------
 Threads
 
-* StartNode : Starts other threads.
+- StartNode : Starts other threads.
 
-* ThreadGetMyExternalIP : Determines outside-the-firewall IP address, sends addr message to connected peers when it determines it.
+- ThreadGetMyExternalIP : Determines outside-the-firewall IP address, sends addr message to connected peers when it determines it. 
 
-* ThreadSocketHandler : Sends/Receives data from peers on port 8333.
+- ThreadSocketHandler : Sends/Receives data from peers on port 8333.
+ 
+- ThreadMessageHandler : Higher-level message handling (sending and receiving).
+ 
+- ThreadOpenConnections : Initiates new connections to peers.
 
-* ThreadMessageHandler : Higher-level message handling (sending and receiving).
+- ThreadTopUpKeyPool : replenishes the keystore's keypool.
+ 
+- ThreadCleanWalletPassphrase : re-locks an encrypted wallet after user has unlocked it for a period of time. 
+ 
+- SendingDialogStartTransfer : used by pay-via-ip-address code (obsolete)
+ 
+- ThreadDelayedRepaint : repaint the gui 
 
-* ThreadOpenConnections : Initiates new connections to peers.
-
-* ThreadTopUpKeyPool : replenishes the keystore's keypool.
-
-* ThreadCleanWalletPassphrase : re-locks an encrypted wallet after user has unlocked it for a period of time.
-
-* SendingDialogStartTransfer : used by pay-via-ip-address code (obsolete)
-
-* ThreadDelayedRepaint : repaint the gui
-
-* ThreadFlushWalletDB : Close the wallet.dat file if it hasn't been used in 500ms.
-
-* ThreadRPCServer : Remote procedure call handler, listens on port 8332 for connections and services them.
-
-* ThreadBitcoinMiner : Generates bitcoins
-
-* ThreadMapPort : Universal plug-and-play startup/shutdown
-
-* Shutdown : Does an orderly shutdown of everything
-
-* ExitTimeout : Windows-only, sleeps 5 seconds then exits application
+- ThreadFlushWalletDB : Close the wallet.dat file if it hasn't been used in 500ms.
+ 
+- ThreadRPCServer : Remote procedure call handler, listens on port 8332 for connections and services them.
+ 
+- ThreadBitcoinMiner : Generates bitcoins
+  
+- ThreadMapPort : Universal plug-and-play startup/shutdown
+ 
+- Shutdown : Does an orderly shutdown of everything
+ 
+- ExitTimeout : Windows-only, sleeps 5 seconds then exits application

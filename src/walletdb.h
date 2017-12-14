@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
-// Distributed under the MIT software license, see the accompanying
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef BITCOIN_WALLETDB_H
 #define BITCOIN_WALLETDB_H
@@ -17,6 +17,7 @@ enum DBErrors
 {
     DB_LOAD_OK,
     DB_CORRUPT,
+    DB_NONCRITICAL_ERROR,
     DB_TOO_NEW,
     DB_LOAD_FAIL,
     DB_NEED_REWRITE
@@ -52,18 +53,18 @@ public:
     bool WriteKey(const CPubKey& vchPubKey, const CPrivKey& vchPrivKey)
     {
         nWalletDBUpdated++;
-        return Write(std::make_pair(std::string("key"), vchPubKey.Raw()), vchPrivKey, false);
+        return Write(std::make_pair(std::string("key"), vchPubKey), vchPrivKey, false);
     }
 
     bool WriteCryptedKey(const CPubKey& vchPubKey, const std::vector<unsigned char>& vchCryptedSecret, bool fEraseUnencryptedKey = true)
     {
         nWalletDBUpdated++;
-        if (!Write(std::make_pair(std::string("ckey"), vchPubKey.Raw()), vchCryptedSecret, false))
+        if (!Write(std::make_pair(std::string("ckey"), vchPubKey), vchCryptedSecret, false))
             return false;
         if (fEraseUnencryptedKey)
         {
-            Erase(std::make_pair(std::string("key"), vchPubKey.Raw()));
-            Erase(std::make_pair(std::string("wkey"), vchPubKey.Raw()));
+            Erase(std::make_pair(std::string("key"), vchPubKey));
+            Erase(std::make_pair(std::string("wkey"), vchPubKey));
         }
         return true;
     }
@@ -91,10 +92,16 @@ public:
         return Read(std::string("bestblock"), locator);
     }
 
+    bool WriteOrderPosNext(int64 nOrderPosNext)
+    {
+        nWalletDBUpdated++;
+        return Write(std::string("orderposnext"), nOrderPosNext);
+    }
+
     bool WriteDefaultKey(const CPubKey& vchPubKey)
     {
         nWalletDBUpdated++;
-        return Write(std::string("defaultkey"), vchPubKey.Raw());
+        return Write(std::string("defaultkey"), vchPubKey);
     }
 
     bool ReadPool(int64 nPool, CKeyPool& keypool)
@@ -140,11 +147,17 @@ public:
 
     bool ReadAccount(const std::string& strAccount, CAccount& account);
     bool WriteAccount(const std::string& strAccount, const CAccount& account);
+private:
+    bool WriteAccountingEntry(const uint64 nAccEntryNum, const CAccountingEntry& acentry);
+public:
     bool WriteAccountingEntry(const CAccountingEntry& acentry);
     int64 GetAccountCreditDebit(const std::string& strAccount);
     void ListAccountCreditDebit(const std::string& strAccount, std::list<CAccountingEntry>& acentries);
 
-    int LoadWallet(CWallet* pwallet);
+    DBErrors ReorderTransactions(CWallet*);
+    DBErrors LoadWallet(CWallet* pwallet);
+    static bool Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys);
+    static bool Recover(CDBEnv& dbenv, std::string filename);
 };
 
 #endif // BITCOIN_WALLETDB_H

@@ -1,24 +1,17 @@
 // Copyright (c) 2012 The Bitcoin developers
-// Copyright (c) 2012-2015 The Peercoin developers
-// Copyright (c) 2014-2015 The rcoin developers
-// Distributed under the MIT software license, see the accompanying
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include <string>
 
 #include "version.h"
 
 // Name of client reported in the 'version' message. Report the same name
-// for both rcoind and rcoin(-qt), to make it harder for attackers to
+// for both bitcoind and bitcoin-qt, to make it harder for attackers to
 // target servers or GUI users specifically.
-
-// For the current run of rcoin releases, the client name should be selected from
-// the list of ancient coinage, from oldest known to more recent.
-// You can find ideas for future client names, here: https://en.wikipedia.org/wiki/List_of_historical_currencies
-
 const std::string CLIENT_NAME("Satoshi");
 
 // Client version number
-#define CLIENT_VERSION_SUFFIX   ""
+#define CLIENT_VERSION_SUFFIX   "-beta"
 
 
 // The following part of the code determines the CLIENT_BUILD variable.
@@ -40,26 +33,24 @@ const std::string CLIENT_NAME("Satoshi");
 #    include "build.h"
 #endif
 
-// git will put "#define GIT_ARCHIVE 1" on the next line inside archives.
+// git will put "#define GIT_ARCHIVE 1" on the next line inside archives. 
 #define GIT_ARCHIVE 1
 #ifdef GIT_ARCHIVE
-#    define GIT_COMMIT_ID "e3c013c"
-#    define GIT_COMMIT_DATE "$Format:%cD"
+#    define GIT_COMMIT_ID "c1e46ab3a90"
+#    define GIT_COMMIT_DATE "Mon, 15 Sep 2014 23:53:37 -1000"
 #endif
 
-#define STRINGIFY(s) #s
-
 #define BUILD_DESC_FROM_COMMIT(maj,min,rev,build,commit) \
-    "v" STRINGIFY(maj) "." STRINGIFY(min) "." STRINGIFY(rev) "." STRINGIFY(build) "-g" commit
+    "v" DO_STRINGIZE(maj) "." DO_STRINGIZE(min) "." DO_STRINGIZE(rev) "." DO_STRINGIZE(build) "-g" commit
 
 #define BUILD_DESC_FROM_UNKNOWN(maj,min,rev,build) \
-    "v" STRINGIFY(maj) "." STRINGIFY(min) "." STRINGIFY(rev) "." STRINGIFY(build) "-unk"
+    "v" DO_STRINGIZE(maj) "." DO_STRINGIZE(min) "." DO_STRINGIZE(rev) "." DO_STRINGIZE(build) "-unk"
 
 #ifndef BUILD_DESC
 #    ifdef GIT_COMMIT_ID
-#        define BUILD_DESC BUILD_DESC_FROM_COMMIT(PEERUNITY_VERSION_MAJOR, PEERUNITY_VERSION_MINOR, PEERUNITY_VERSION_REVISION, PEERUNITY_VERSION_BUILD, GIT_COMMIT_ID)
+#        define BUILD_DESC BUILD_DESC_FROM_COMMIT(CLIENT_VERSION_MAJOR, CLIENT_VERSION_MINOR, CLIENT_VERSION_REVISION, CLIENT_VERSION_BUILD, GIT_COMMIT_ID)
 #    else
-#        define BUILD_DESC BUILD_DESC_FROM_UNKNOWN(PEERUNITY_VERSION_MAJOR, PEERUNITY_VERSION_MINOR, PEERUNITY_VERSION_REVISION, PEERUNITY_VERSION_BUILD)
+#        define BUILD_DESC BUILD_DESC_FROM_UNKNOWN(CLIENT_VERSION_MAJOR, CLIENT_VERSION_MINOR, CLIENT_VERSION_REVISION, CLIENT_VERSION_BUILD)
 #    endif
 #endif
 

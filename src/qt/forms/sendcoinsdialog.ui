@@ -232,7 +232,7 @@
                   <enum>Qt::ActionsContextMenu</enum>
                  </property>
                  <property name="text">
-                  <string>0</string>
+                  <string notr="true">0</string>
                  </property>
                  <property name="margin">
                   <number>0</number>
@@ -267,7 +267,7 @@
                   <enum>Qt::ActionsContextMenu</enum>
                  </property>
                  <property name="text">
-                  <string>0</string>
+                  <string notr="true">0</string>
                  </property>
                  <property name="textInteractionFlags">
                   <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -321,7 +321,7 @@
                   <enum>Qt::ActionsContextMenu</enum>
                  </property>
                  <property name="text">
-                  <string>0.00 BTC</string>
+                  <string notr="true">0.00 BTC</string>
                  </property>
                  <property name="textInteractionFlags">
                   <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -407,7 +407,7 @@
                   <enum>Qt::ActionsContextMenu</enum>
                  </property>
                  <property name="text">
-                  <string>0.00 BTC</string>
+                  <string notr="true">0.00 BTC</string>
                  </property>
                  <property name="textInteractionFlags">
                   <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -493,7 +493,7 @@
                   <enum>Qt::ActionsContextMenu</enum>
                  </property>
                  <property name="text">
-                  <string>0.00 BTC</string>
+                  <string notr="true">0.00 BTC</string>
                  </property>
                  <property name="textInteractionFlags">
                   <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -506,7 +506,7 @@
                   <string notr="true">font-weight:bold;</string>
                  </property>
                  <property name="text">
-                  <string>Change</string>
+                  <string>Change:</string>
                  </property>
                 </widget>
                </item>
@@ -525,7 +525,7 @@
                   <enum>Qt::ActionsContextMenu</enum>
                  </property>
                  <property name="text">
-                  <string>0.00 BTC</string>
+                  <string notr="true">0.00 BTC</string>
                  </property>
                  <property name="textInteractionFlags">
                   <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -665,11 +665,14 @@
         <string>Send to multiple recipients at once</string>
        </property>
        <property name="text">
-        <string>&amp;Add Recipient</string>
+        <string>Add &amp;Recipient</string>
        </property>
        <property name="icon">
         <iconset resource="../bitcoin.qrc">
          <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -694,6 +697,9 @@
        <property name="autoRepeatDelay">
         <number>300</number>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -710,8 +716,11 @@
        </item>
        <item>
         <widget class="QLabel" name="labelBalance">
+         <property name="cursor">
+          <cursorShape>IBeamCursor</cursorShape>
+         </property>
          <property name="text">
-          <string>123.456 BTC</string>
+          <string>123.456 RICH</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -745,7 +754,7 @@
         <string>Confirm the send action</string>
        </property>
        <property name="text">
-        <string>&amp;Send</string>
+        <string>S&amp;end</string>
        </property>
        <property name="icon">
         <iconset resource="../bitcoin.qrc">
